@@ -20,7 +20,7 @@ Future<void> deleteCustomer(int index) async {
   final customerDB = await Hive.openBox<CustomerDataModel>('customer_DB');
   await customerDB.deleteAt(index);
   customerListNotifier.notifyListeners();
-  getAllCustomers();
+  await getAllCustomers();
 }
 
 Future<void> editCustomer(index, CustomerDataModel value) async {

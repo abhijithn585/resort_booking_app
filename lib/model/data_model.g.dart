@@ -20,7 +20,7 @@ class CustomerDataModelAdapter extends TypeAdapter<CustomerDataModel> {
       name: fields[0] as String,
       number: fields[1] as String,
       fromdate: fields[2] as String,
-      toDate: fields[3] as String,
+      todate: fields[3] as String,
     );
   }
 
@@ -35,7 +35,7 @@ class CustomerDataModelAdapter extends TypeAdapter<CustomerDataModel> {
       ..writeByte(2)
       ..write(obj.fromdate)
       ..writeByte(3)
-      ..write(obj.toDate);
+      ..write(obj.todate);
   }
 
   @override

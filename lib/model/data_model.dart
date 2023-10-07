@@ -10,11 +10,12 @@ class CustomerDataModel {
   @HiveField(2)
   final String fromdate;
   @HiveField(3)
-  final String toDate;
+  final String todate;
 
-  CustomerDataModel(
-      {required this.name,
-      required this.number,
-      required this.fromdate,
-      required this.toDate});
+  CustomerDataModel({
+    required this.name,
+    required this.number,
+    required this.fromdate,
+    required this.todate,
+  });
 }

@@ -1,16 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:intl/intl.dart';
 
-class BookingScreen extends StatelessWidget {
-  BookingScreen({super.key});
-  final _nameController = TextEditingController();
-  final _numberController = TextEditingController();
-  final _fromDateController = TextEditingController();
-  final _toDateController = TextEditingController();
+class BookingScreen extends StatefulWidget {
+  const BookingScreen({super.key});
+
+  @override
+  State<BookingScreen> createState() => _BookingScreenState();
+}
+
+class _BookingScreenState extends State<BookingScreen> {
+  final nameController = TextEditingController();
+  final numberController = TextEditingController();
+  final fromDatecontroller = TextEditingController();
+  final toDateController = TextEditingController();
+
   final _formkey = GlobalKey<FormState>();
+  DateTime fromDateTime = DateTime.now();
+  DateTime toDateTime = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +65,7 @@ class BookingScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.person),
                                 const SizedBox(
@@ -61,7 +74,7 @@ class BookingScreen extends StatelessWidget {
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    controller: _nameController,
+                                    controller: nameController,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -90,6 +103,7 @@ class BookingScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.phone),
                                 const SizedBox(
@@ -103,7 +117,7 @@ class BookingScreen extends StatelessWidget {
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'[0-9]'))
                                     ],
-                                    controller: _numberController,
+                                    controller: numberController,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -132,15 +146,21 @@ class BookingScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.calendar_month),
+                                IconButton(
+                                  icon: const Icon(Icons.calendar_month),
+                                  onPressed: () {
+                                    _showFromdatepicker(context);
+                                  },
+                                ),
                                 const SizedBox(
-                                  width: 20,
+                                  width: 10,
                                 ),
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    controller: _fromDateController,
+                                    controller: fromDatecontroller,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -149,7 +169,7 @@ class BookingScreen extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                           borderSide: BorderSide.none),
-                                      hintText: 'DD/MM/YYYY',
+                                      hintText: 'fromdate',
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -159,16 +179,19 @@ class BookingScreen extends StatelessWidget {
                                       }
                                     },
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
-                          const Text(
-                            "To",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                            child: Text(
+                              "To",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
@@ -176,15 +199,21 @@ class BookingScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.calendar_month),
+                                IconButton(
+                                  icon: const Icon(Icons.calendar_month),
+                                  onPressed: () {
+                                    _showTodatepicker(context);
+                                  },
+                                ),
                                 const SizedBox(
-                                  width: 20,
+                                  width: 10,
                                 ),
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    controller: _toDateController,
+                                    controller: toDateController,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -193,7 +222,7 @@ class BookingScreen extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                           borderSide: BorderSide.none),
-                                      hintText: 'DD/MM/YYYY',
+                                      hintText: 'todate',
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -212,20 +241,23 @@ class BookingScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      SizedBox(
-                        width: 280,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 128, 98, 248),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20))),
-                            onPressed: () {
-                              _formkey.currentState!.validate();
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                        child: SizedBox(
+                          width: 280,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 128, 98, 248),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20))),
+                              onPressed: () {
+                                _formkey.currentState!.validate();
 
-                              onAddDetailsButtonClicked(context);
-                            },
-                            child: const Text('Done')),
+                                onAddDetailsButtonClicked(context);
+                              },
+                              child: const Text('Done')),
+                        ),
                       )
                     ],
                   ),
@@ -238,20 +270,58 @@ class BookingScreen extends StatelessWidget {
     );
   }
 
+  Future<DateTime?> _showTodatepicker(BuildContext context) {
+    return showDatePicker(
+            context: context,
+            initialDate: toDateTime,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2040))
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          toDateTime = value;
+          toDateController.text = _formatDate(value);
+        });
+      }
+    });
+  }
+
+  Future<DateTime?> _showFromdatepicker(BuildContext context) {
+    return showDatePicker(
+            context: context,
+            initialDate: fromDateTime,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2040))
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          fromDateTime = value;
+          fromDatecontroller.text = _formatDate(value);
+        });
+      }
+    });
+  }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('MM/dd/yyyy').format(date);
+  }
+
   Future<void> onAddDetailsButtonClicked(BuildContext context) async {
-    final _name = _nameController.text.trim();
-    final _number = _numberController.text.trim();
-    final _fromDate = _fromDateController.text.trim();
-    final _toDate = _toDateController.text.trim();
-    if (_name.isEmpty ||
-        _number.isEmpty ||
-        _fromDate.isEmpty ||
-        _toDate.isEmpty) {
+    final newName = nameController.text.trim();
+    final newNumber = numberController.text.trim();
+    final newFromDate = fromDatecontroller.text.trim();
+    final newToDate = toDateController.text.trim();
+
+    if (newName.isEmpty || newNumber.isEmpty) {
       return;
     }
-    final _customer = CustomerDataModel(
-        name: _name, number: _number, fromdate: _fromDate, toDate: _toDate);
-    addcustomer(_customer);
+    final newCustomer = CustomerDataModel(
+      name: newName,
+      number: newNumber,
+      fromdate: newFromDate,
+      todate: newToDate,
+    );
+    addcustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const BottomNavBar(),
     ));

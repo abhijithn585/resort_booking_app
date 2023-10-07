@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:intl/intl.dart';
 
 class EditCustomerScreen extends StatefulWidget {
   var name;
@@ -14,8 +15,7 @@ class EditCustomerScreen extends StatefulWidget {
       {required this.index,
       required this.name,
       required this.number,
-      required this.fromdate,
-      required this.todate});
+      required this.fromdate});
 
   @override
   State<EditCustomerScreen> createState() => _EditCustomerScreenState();
@@ -24,17 +24,18 @@ class EditCustomerScreen extends StatefulWidget {
 class _EditCustomerScreenState extends State<EditCustomerScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _numberController = TextEditingController();
-  TextEditingController _fromDateController = TextEditingController();
-  TextEditingController _toDateController = TextEditingController();
+  TextEditingController fromDatecontroller = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.name);
     _numberController = TextEditingController(text: widget.number);
-    _fromDateController = TextEditingController(text: widget.fromdate);
-    _toDateController = TextEditingController(text: widget.todate);
+    fromDatecontroller = TextEditingController(text: widget.fromdate);
   }
+
+  DateTime dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -138,14 +139,19 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_month),
+                                IconButton(
+                                  icon: const Icon(Icons.calendar_month),
+                                  onPressed: () {
+                                    _showdatepicker(context);
+                                  },
+                                ),
                                 const SizedBox(
                                   width: 20,
                                 ),
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    controller: _fromDateController,
+                                    controller: fromDatecontroller,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -154,10 +160,17 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
                                           borderRadius:
                                               BorderRadius.circular(20.0),
                                           borderSide: BorderSide.none),
-                                      hintText: 'DD/MM/YYYY',
+                                      hintText: 'fromdate',
                                     ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -171,30 +184,15 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_month),
-                                const SizedBox(
+                                Icon(Icons.calendar_month),
+                                SizedBox(
                                   width: 20,
                                 ),
-                                SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: _toDateController,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(
-                                          255, 212, 212, 212),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          borderSide: BorderSide.none),
-                                      hintText: 'DD/MM/YYYY',
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(width: 300, child: DatePickerWidget()),
                               ],
                             ),
                           ),
@@ -225,19 +223,36 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
     );
   }
 
+  Future<DateTime?> _showdatepicker(BuildContext context) {
+    return showDatePicker(
+            context: context,
+            initialDate: dateTime,
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2040))
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          dateTime = value;
+          fromDatecontroller.text = _formatDate(value);
+        });
+      }
+    });
+  }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('MM/dd/yyyy').format(date);
+  }
+
   Future<void> updateAll() async {
     final name1 = _nameController.text.trim();
     final number1 = _numberController.text.trim();
-    final fromDate1 = _fromDateController.text.trim();
-    final toDate1 = _toDateController.text.trim();
-    if (name1.isEmpty ||
-        number1.isEmpty ||
-        fromDate1.isEmpty ||
-        toDate1.isEmpty) {
+    final newFromDate = fromDatecontroller.text.trim();
+    final newToDate = toDateController.text.trim();
+    if (name1.isEmpty || number1.isEmpty) {
       return;
     }
     final update = CustomerDataModel(
-        name: name1, number: number1, fromdate: fromDate1, toDate: toDate1);
+        name: name1, number: number1, fromdate: newFromDate, todate: newToDate);
     editCustomer(widget.index, update);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const BottomNavBar(),
