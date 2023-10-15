@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/data_model.dart';
+import 'package:flutter_application_1/screens/booking_list_screen.dart';
 import 'package:flutter_application_1/screens/login_screen.dart';
+import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -18,10 +20,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'restoapp',
-      home: LoginScreen(),
-      debugShowCheckedModeBanner: false,
-    );
+    return MaterialApp(
+        title: 'restoapp',
+        home: LoginScreen(),
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/bottomNavBar': (context) => BottomNavBar(),
+          '/bookingListScreen': (context) => BookingListScreen(),
+        });
   }
 }

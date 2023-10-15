@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/screens/subscreens/edit_customer.dart';
+import 'dart:async';
+
+import 'package:flutter_application_1/screens/subscreens/revenue.dart';
 
 class BookingListScreen extends StatefulWidget {
   const BookingListScreen({Key? key}) : super(key: key);
@@ -9,9 +12,16 @@ class BookingListScreen extends StatefulWidget {
   State<BookingListScreen> createState() => _BookingListScreenState();
 }
 
+enum FilterCriteria { Daily, Weekly, Monthly, All }
+
+FilterCriteria selectedFilter = FilterCriteria.Daily;
+
 class _BookingListScreenState extends State<BookingListScreen> {
   TextEditingController SearchController = TextEditingController();
   List<CustomerDataModel> filteredCustomerList = [];
+  Map<int, Color> tileColors = {};
+  Map<int, bool> completionStatus = {};
+
   @override
   void initState() {
     super.initState();
@@ -23,8 +33,8 @@ class _BookingListScreenState extends State<BookingListScreen> {
     setState(() {
       filteredCustomerList = customerListNotifier.value
           .where((customer) =>
-              customer.name.toLowerCase().contains(query.toLowerCase()) ||
-              customer.number.contains(query))
+              customer.name!.toLowerCase().contains(query.toLowerCase()) ||
+              customer.number!.contains(query))
           .toList();
     });
   }
@@ -56,12 +66,29 @@ class _BookingListScreenState extends State<BookingListScreen> {
     );
   }
 
+  void changeTileColorToRed(int index) async {
+    await Future.delayed(Duration(seconds: 1));
+    tileColors[index] = Colors.red;
+    completionStatus[index] = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     getAllCustomers();
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: const Color.fromARGB(255, 128, 98, 248),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => revenueScreen(),
+                  ));
+                },
+                icon: const Icon(Icons.bar_chart))
+          ],
         ),
         body: Column(
           children: [
@@ -85,17 +112,14 @@ class _BookingListScreenState extends State<BookingListScreen> {
                 builder: (BuildContext ctx,
                     List<CustomerDataModel> customerList, Widget? child) {
                   return ListView.separated(
-                    itemBuilder: (ctx, index) {
-                      final data = filteredCustomerList.isNotEmpty
-                          ? filteredCustomerList[index]
-                          : customerList[index];
-                      return Card(
-                        color: const Color.fromARGB(255, 207, 207, 207),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        elevation: 3,
-                        child: ListTile(
+                      itemBuilder: (ctx, index) {
+                        final data = filteredCustomerList.isNotEmpty
+                            ? filteredCustomerList[index]
+                            : customerList[index];
+                        return ListTile(
+                          tileColor: tileColors[index] ??
+                              Color.fromARGB(255, 128, 98, 248),
+                          textColor: Color.fromARGB(255, 255, 255, 255),
                           contentPadding: const EdgeInsets.all(16),
                           title: Align(
                               alignment: Alignment.center,
@@ -111,7 +135,11 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                   Text(
                                     data.number,
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
                                   ),
                                   Text(
                                     data.fromdate,
@@ -126,7 +154,6 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                   ),
                                 ],
                               )),
-                          leading: const Icon(Icons.person),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -158,6 +185,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                           .push(MaterialPageRoute(
                                         builder: (context) =>
                                             EditCustomerScreen(
+                                          rate: data.rate,
                                           index: index,
                                           name: data.name,
                                           number: data.number,
@@ -169,23 +197,39 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                       Icons.edit,
                                       color: Colors.white,
                                     )),
-                              )
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.green)),
+                                onPressed: () {
+                                  if (completionStatus[index] == true) {
+                                  } else {
+                                    changeTileColorToRed(index);
+                                  }
+                                },
+                                child: Text(
+                                  completionStatus[index] == true
+                                      ? "Completed"
+                                      : "Start",
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: ((context, index) {
-                      return const Divider(
-                        color: Colors.transparent,
-                      );
-                    }),
-                    itemCount:
-                        // filteredCustomerList.length,
-                        filteredCustomerList.isNotEmpty
-                            ? filteredCustomerList.length
-                            : customerList.length,
-                  );
+                        );
+                      },
+                      separatorBuilder: ((context, index) {
+                        return const Divider(
+                          color: Colors.transparent,
+                        );
+                      }),
+                      itemCount: filteredCustomerList.isNotEmpty
+                          ? filteredCustomerList.length
+                          : customerList.length);
                 },
               ),
             ),

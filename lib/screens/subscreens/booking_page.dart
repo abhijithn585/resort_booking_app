@@ -18,6 +18,7 @@ class _BookingScreenState extends State<BookingScreen> {
   final numberController = TextEditingController();
   final fromDatecontroller = TextEditingController();
   final toDateController = TextEditingController();
+  final rateController = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
   DateTime fromDateTime = DateTime.now();
@@ -235,6 +236,44 @@ class _BookingScreenState extends State<BookingScreen> {
                                 ),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.currency_rupee),
+                                  onPressed: () {},
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                SizedBox(
+                                  width: 300,
+                                  child: TextFormField(
+                                    controller: rateController,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: const Color.fromARGB(
+                                          255, 212, 212, 212),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                          borderSide: BorderSide.none),
+                                      hintText: 'Rate',
+                                    ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -311,15 +350,30 @@ class _BookingScreenState extends State<BookingScreen> {
     final newNumber = numberController.text.trim();
     final newFromDate = fromDatecontroller.text.trim();
     final newToDate = toDateController.text.trim();
-
+    final newRate = rateController.text.trim();
     if (newName.isEmpty || newNumber.isEmpty) {
       return;
     }
+    final isDuplicate = customerListNotifier.value.any(
+        (customer) => customer.name == newName || customer.number == newNumber);
+
+    if (isDuplicate) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('Customer with the same name or number already exists.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final newCustomer = CustomerDataModel(
       name: newName,
       number: newNumber,
       fromdate: newFromDate,
       todate: newToDate,
+      rate: newRate,
     );
     addcustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(

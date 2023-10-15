@@ -31,3 +31,11 @@ Future<void> editCustomer(index, CustomerDataModel value) async {
   customerDB.putAt(index, value);
   getAllCustomers();
 }
+
+calculateRevenue(List<CustomerDataModel> customers) {
+  double rate = 0;
+  for (var customer in customers) {
+    rate += double.parse(customer.rate!);
+  }
+  return rate;
+}

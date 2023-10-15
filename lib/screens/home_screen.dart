@@ -8,9 +8,16 @@ import 'package:flutter_application_1/screens/subscreens/hotel_raviz_details.dar
 import 'package:flutter_application_1/screens/subscreens/hotel_tropical_details.dart';
 import 'package:flutter_application_1/screens/subscreens/terms_and_conditions.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final images = [];
 
   @override

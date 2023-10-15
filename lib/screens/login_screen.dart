@@ -9,6 +9,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final userNameoCntroller = TextEditingController();
+  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,38 +36,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
+                    const Column(
                       children: [
-                        const Text(
+                        Text(
                           "Let's Find Your",
                           style: TextStyle(
                               fontSize: 36, fontWeight: FontWeight.bold),
                         ),
-                        const Text('Sweet &',
+                        Text('Sweet &',
                             style: TextStyle(
                                 fontSize: 36, fontWeight: FontWeight.bold)),
-                        const Text('Dream Place!',
+                        Text('Dream Place!',
                             style: TextStyle(
                                 fontSize: 36, fontWeight: FontWeight.bold)),
-                        const SizedBox(
+                        SizedBox(
                           height: 30,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            width: 300,
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor:
-                                    const Color.fromARGB(255, 212, 212, 212),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    borderSide: BorderSide.none),
-                                hintText: 'Username',
-                              ),
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -87,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (context) => const BottomNavBar(),
                             ));
                           },
-                          child: const Text('Login')),
+                          child: const Text('START')),
                     )
                   ],
                 ),

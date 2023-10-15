@@ -1,7 +1,8 @@
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/booking_screen.dart';
+import 'package:flutter_application_1/screens/booking_list_screen.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/screens/subscreens/revenue.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -20,12 +21,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    BookingListScreen(),
+    const BookingListScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
       extendBody: true,
       bottomNavigationBar: DotNavigationBar(
           currentIndex: _selectedIndex,
@@ -40,7 +44,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             DotNavigationBarItem(
                 icon: const Icon(Icons.list),
                 selectedColor: Colors.white,
-                unselectedColor: const Color.fromARGB(255, 0, 0, 0))
+                unselectedColor: const Color.fromARGB(255, 0, 0, 0)),
           ]),
     );
   }
