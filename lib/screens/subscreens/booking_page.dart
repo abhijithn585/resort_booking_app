@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
@@ -17,7 +16,6 @@ class _BookingScreenState extends State<BookingScreen> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
   final fromDatecontroller = TextEditingController();
-  final toDateController = TextEditingController();
   final rateController = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
@@ -187,56 +185,6 @@ class _BookingScreenState extends State<BookingScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                            child: Text(
-                              "To",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.calendar_month),
-                                  onPressed: () {
-                                    _showTodatepicker(context);
-                                  },
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                SizedBox(
-                                  width: 300,
-                                  child: TextFormField(
-                                    controller: toDateController,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color.fromARGB(
-                                          255, 212, 212, 212),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                          borderSide: BorderSide.none),
-                                      hintText: 'todate',
-                                    ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Value is Empty';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
@@ -309,22 +257,6 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  Future<DateTime?> _showTodatepicker(BuildContext context) {
-    return showDatePicker(
-            context: context,
-            initialDate: toDateTime,
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2040))
-        .then((value) {
-      if (value != null) {
-        setState(() {
-          toDateTime = value;
-          toDateController.text = _formatDate(value);
-        });
-      }
-    });
-  }
-
   Future<DateTime?> _showFromdatepicker(BuildContext context) {
     return showDatePicker(
             context: context,
@@ -349,7 +281,6 @@ class _BookingScreenState extends State<BookingScreen> {
     final newName = nameController.text.trim();
     final newNumber = numberController.text.trim();
     final newFromDate = fromDatecontroller.text.trim();
-    final newToDate = toDateController.text.trim();
     final newRate = rateController.text.trim();
     if (newName.isEmpty || newNumber.isEmpty) {
       return;
@@ -372,7 +303,6 @@ class _BookingScreenState extends State<BookingScreen> {
       name: newName,
       number: newNumber,
       fromdate: newFromDate,
-      todate: newToDate,
       rate: newRate,
     );
     addcustomer(newCustomer);

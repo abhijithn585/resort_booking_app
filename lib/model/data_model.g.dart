@@ -20,7 +20,6 @@ class CustomerDataModelAdapter extends TypeAdapter<CustomerDataModel> {
       name: fields[0] as String,
       number: fields[1] as String,
       fromdate: fields[2] as String,
-      todate: fields[3] as String,
       rate: fields[4] as String?,
     );
   }
@@ -28,15 +27,13 @@ class CustomerDataModelAdapter extends TypeAdapter<CustomerDataModel> {
   @override
   void write(BinaryWriter writer, CustomerDataModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
       ..write(obj.number)
       ..writeByte(2)
       ..write(obj.fromdate)
-      ..writeByte(3)
-      ..write(obj.todate)
       ..writeByte(4)
       ..write(obj.rate);
   }

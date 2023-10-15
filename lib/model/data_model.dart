@@ -9,8 +9,7 @@ class CustomerDataModel {
   final String number;
   @HiveField(2)
   final String fromdate;
-  @HiveField(3)
-  final String todate;
+
   @HiveField(4)
   final String? rate;
 
@@ -18,7 +17,6 @@ class CustomerDataModel {
     required this.name,
     required this.number,
     required this.fromdate,
-    required this.todate,
     required this.rate,
   });
 }

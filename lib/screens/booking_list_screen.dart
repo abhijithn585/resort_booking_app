@@ -12,11 +12,8 @@ class BookingListScreen extends StatefulWidget {
   State<BookingListScreen> createState() => _BookingListScreenState();
 }
 
-enum FilterCriteria { Daily, Weekly, Monthly, All }
-
-FilterCriteria selectedFilter = FilterCriteria.Daily;
-
 class _BookingListScreenState extends State<BookingListScreen> {
+  // ignore: non_constant_identifier_names
   TextEditingController SearchController = TextEditingController();
   List<CustomerDataModel> filteredCustomerList = [];
   Map<int, Color> tileColors = {};
@@ -67,7 +64,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
   }
 
   void changeTileColorToRed(int index) async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 5));
     tileColors[index] = Colors.red;
     completionStatus[index] = true;
     setState(() {});
@@ -118,8 +115,8 @@ class _BookingListScreenState extends State<BookingListScreen> {
                             : customerList[index];
                         return ListTile(
                           tileColor: tileColors[index] ??
-                              Color.fromARGB(255, 128, 98, 248),
-                          textColor: Color.fromARGB(255, 255, 255, 255),
+                              const Color.fromARGB(255, 128, 98, 248),
+                          textColor: const Color.fromARGB(255, 255, 255, 255),
                           contentPadding: const EdgeInsets.all(16),
                           title: Align(
                               alignment: Alignment.center,
@@ -138,17 +135,11 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Text(
                                     data.fromdate,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  const Text('to'),
-                                  Text(
-                                    data.todate,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -198,7 +189,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
                                       color: Colors.white,
                                     )),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               ElevatedButton(

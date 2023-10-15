@@ -182,7 +182,7 @@ class CustomWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                       child: Text(price,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 10, 10),
@@ -209,13 +209,13 @@ class CustomWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          child: Icon(icon1,
-              size: 30, color: const Color.fromARGB(255, 128, 98, 248)),
           height: 60,
           width: 60,
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 215, 215, 215),
               borderRadius: BorderRadius.circular(10)),
+          child: Icon(icon1,
+              size: 30, color: const Color.fromARGB(255, 128, 98, 248)),
         ),
         const SizedBox(
           height: 10,
