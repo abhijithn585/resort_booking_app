@@ -3,8 +3,8 @@ import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/screens/subscreens/edit_customer.dart';
 import 'dart:async';
-
 import 'package:flutter_application_1/screens/subscreens/revenue.dart';
+import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
 
 class BookingListScreen extends StatefulWidget {
   const BookingListScreen({Key? key}) : super(key: key);
@@ -75,13 +75,19 @@ class _BookingListScreenState extends State<BookingListScreen> {
     getAllCustomers();
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const BottomNavBar(),
+                ));
+              },
+              icon: const Icon(Icons.arrow_back_outlined)),
           backgroundColor: const Color.fromARGB(255, 128, 98, 248),
           actions: [
             IconButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => revenueScreen(),
+                    builder: (context) => const revenueScreen(),
                   ));
                 },
                 icon: const Icon(Icons.bar_chart))

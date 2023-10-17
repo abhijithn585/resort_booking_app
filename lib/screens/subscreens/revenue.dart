@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 
+// ignore: camel_case_types
 class revenueScreen extends StatefulWidget {
   const revenueScreen({super.key});
 
@@ -12,6 +13,7 @@ class revenueScreen extends StatefulWidget {
   State<revenueScreen> createState() => _revenueScreenState();
 }
 
+// ignore: camel_case_types
 class _revenueScreenState extends State<revenueScreen> {
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,11 @@ class _revenueScreenState extends State<revenueScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Text(
+            const Text(
               'Revenue',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             SizedBox(

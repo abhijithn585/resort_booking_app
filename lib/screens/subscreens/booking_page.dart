@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:flutter_application_1/screens/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -307,7 +307,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
     addcustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const BottomNavBar(),
+      builder: (context) => const BookingListScreen(),
     ));
   }
 }

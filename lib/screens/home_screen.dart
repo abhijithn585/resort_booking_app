@@ -225,15 +225,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const Positioned(
-                top: 80,
-                left: 20,
-                child: Text(
-                  "Hi! Abhijith",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                      color: Colors.white),
-                ))
+              top: 80,
+              left: 20,
+              child: Text(
+                "Hi! Abhijith",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.white),
+              ),
+            )
           ],
         ));
   }
@@ -252,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Stack(
               children: [
-                Container(
+                SizedBox(
                   height: 200,
                   width: 150,
                   child: Image.asset(
@@ -260,13 +261,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Positioned(
+                const Positioned(
                   top: 150,
                   left: 40,
-                  child: Container(
-                    child: const Column(
-                      children: [],
-                    ),
+                  child: Column(
+                    children: [],
                   ),
                 )
               ],

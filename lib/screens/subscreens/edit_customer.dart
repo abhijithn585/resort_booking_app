@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/db/functons/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:flutter_application_1/screens/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class EditCustomerScreen extends StatefulWidget {
   var name;
   var number;
@@ -12,6 +13,7 @@ class EditCustomerScreen extends StatefulWidget {
   var rate;
   int index;
 
+  // ignore: use_key_in_widget_constructors
   EditCustomerScreen(
       {required this.index,
       required this.name,
@@ -281,7 +283,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
     );
     editCustomer(widget.index, update);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const BottomNavBar(),
+      builder: (context) => const BookingListScreen(),
     ));
   }
 }
