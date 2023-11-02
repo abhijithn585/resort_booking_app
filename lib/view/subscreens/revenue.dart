@@ -2,8 +2,9 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/db/functons/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
+import 'package:provider/provider.dart';
 
 // ignore: camel_case_types
 class revenueScreen extends StatefulWidget {
@@ -17,7 +18,8 @@ class revenueScreen extends StatefulWidget {
 class _revenueScreenState extends State<revenueScreen> {
   @override
   Widget build(BuildContext context) {
-    List<CustomerDataModel> customer = customerListNotifier.value;
+    final db = Provider.of<Dbprovider>(context, listen: false);
+    List<CustomerDataModel> customer = db.customerList;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 128, 98, 248),
@@ -37,7 +39,7 @@ class _revenueScreenState extends State<revenueScreen> {
               child: PieChart(PieChartData(
                   sections: List.generate(customer.length, (index) {
                     double rate = double.parse(customer[index].rate!);
-                    double totalrevenue = calculateRevenue(customer);
+                    double totalrevenue = db.calculateRevenue(customer);
                     double percentage = (rate / totalrevenue) * 100;
                     return PieChartSectionData(
                         value: percentage,

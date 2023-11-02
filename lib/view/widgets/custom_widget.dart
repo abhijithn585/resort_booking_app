@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/view/home_screen.dart';
 
 // ignore: must_be_immutable
 class CustomWidget extends StatelessWidget {

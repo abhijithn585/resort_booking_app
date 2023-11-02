@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/db/functons/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/booking_list_screen.dart';
+import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class EditCustomerScreen extends StatefulWidget {
@@ -268,6 +269,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
   }
 
   Future<void> updateAll() async {
+    final db = Provider.of<Dbprovider>(context, listen: false);
     final newName1 = nameController.text.trim();
     final newNumber1 = numberController.text.trim();
     final newFromDate1 = fromDatecontroller.text.trim();
@@ -281,7 +283,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
       fromdate: newFromDate1,
       rate: newRate1,
     );
-    editCustomer(widget.index, update);
+    db.editCustomer(widget.index, update);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const BookingListScreen(),
     ));

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/db/functons/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/booking_list_screen.dart';
+import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -278,6 +279,7 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> onAddDetailsButtonClicked(BuildContext context) async {
+    final db = Provider.of<Dbprovider>(context, listen: false);
     final newName = nameController.text.trim();
     final newNumber = numberController.text.trim();
     final newFromDate = fromDatecontroller.text.trim();
@@ -285,7 +287,7 @@ class _BookingScreenState extends State<BookingScreen> {
     if (newName.isEmpty || newNumber.isEmpty) {
       return;
     }
-    final isDuplicate = customerListNotifier.value.any(
+    final isDuplicate = db.customerList.any(
         (customer) => customer.name == newName || customer.number == newNumber);
 
     if (isDuplicate) {
@@ -305,7 +307,7 @@ class _BookingScreenState extends State<BookingScreen> {
       fromdate: newFromDate,
       rate: newRate,
     );
-    addcustomer(newCustomer);
+    db.addcustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => const BookingListScreen(),
     ));

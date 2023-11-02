@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/contollers/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/booking_list_screen.dart';
-import 'package:flutter_application_1/screens/login_screen.dart';
-import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:flutter_application_1/view/booking_list_screen.dart';
+import 'package:flutter_application_1/view/login_screen.dart';
+import 'package:flutter_application_1/view/widgets/bottomnavbar.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +22,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'restoapp',
-        home: LoginScreen(),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          '/bottomNavBar': (context) => BottomNavBar(),
-          '/bookingListScreen': (context) => BookingListScreen(),
-        });
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => Dbprovider())],
+      child: MaterialApp(
+          title: 'restoapp',
+          home: LoginScreen(),
+          debugShowCheckedModeBanner: false,
+          routes: {
+            '/bottomNavBar': (context) => BottomNavBar(),
+            '/bookingListScreen': (context) => BookingListScreen(),
+          }),
+    );
   }
 }

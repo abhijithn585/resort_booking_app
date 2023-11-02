@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/db/functons/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions.dart';
 import 'package:flutter_application_1/model/data_model.dart';
-import 'package:flutter_application_1/screens/subscreens/edit_customer.dart';
+import 'package:flutter_application_1/view/subscreens/edit_customer.dart';
 import 'dart:async';
-import 'package:flutter_application_1/screens/subscreens/revenue.dart';
-import 'package:flutter_application_1/screens/widgets/bottomnavbar.dart';
+import 'package:flutter_application_1/view/subscreens/revenue.dart';
+import 'package:flutter_application_1/view/widgets/bottomnavbar.dart';
+import 'package:provider/provider.dart';
 
 class BookingListScreen extends StatefulWidget {
   const BookingListScreen({Key? key}) : super(key: key);
@@ -15,31 +16,31 @@ class BookingListScreen extends StatefulWidget {
 class _BookingListScreenState extends State<BookingListScreen> {
   // ignore: non_constant_identifier_names
   TextEditingController SearchController = TextEditingController();
-  List<CustomerDataModel> filteredCustomerList = [];
   Map<int, Color> tileColors = {};
   Map<int, bool> completionStatus = {};
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getAllCustomers();
+  // }
+
   @override
-  void initState() {
-    super.initState();
-    getAllCustomers();
+  void didChangeDependencies() {
+    Provider.of<Dbprovider>(context, listen: false).getAllCustomers();
+
+    super.didChangeDependencies();
   }
 
-  void filterCustomers(String query) {
-    // List<CustomerDataModel> result = [];
-    setState(() {
-      filteredCustomerList = customerListNotifier.value
-          .where((customer) =>
-              customer.name!.toLowerCase().contains(query.toLowerCase()) ||
-              customer.number!.contains(query))
-          .toList();
-    });
+  void filterCustomersList(String query) {
+    Provider.of<Dbprovider>(context, listen: false).filterCustomerList(query);
   }
 
   Future<void> _showDeleteConfirmationDialog(int index) async {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
+        final db = Provider.of<Dbprovider>(context, listen: false);
         return AlertDialog(
           title: const Text('Delete Confirmation'),
           content: const Text('Are you sure you want to delete this customer?'),
@@ -52,7 +53,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
             ),
             TextButton(
               onPressed: () {
-                deleteCustomer(index);
+                db.deleteCustomer(index);
                 Navigator.of(context).pop();
               },
               child: const Text('Delete'),
@@ -72,7 +73,9 @@ class _BookingListScreenState extends State<BookingListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getAllCustomers();
+    final db = Provider.of<Dbprovider>(context);
+
+    db.getAllCustomers();
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -100,7 +103,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
               child: TextField(
                 controller: SearchController,
                 onChanged: (value) {
-                  filterCustomers(value);
+                  filterCustomersList(value);
                 },
                 decoration: const InputDecoration(
                   labelText: 'Search',
@@ -110,15 +113,13 @@ class _BookingListScreenState extends State<BookingListScreen> {
               ),
             ),
             Expanded(
-              child: ValueListenableBuilder(
-                valueListenable: customerListNotifier,
-                builder: (BuildContext ctx,
-                    List<CustomerDataModel> customerList, Widget? child) {
+              child: Consumer(
+                builder: (context, value, child) {
                   return ListView.separated(
                       itemBuilder: (ctx, index) {
-                        final data = filteredCustomerList.isNotEmpty
-                            ? filteredCustomerList[index]
-                            : customerList[index];
+                        final data = db.filteredCustomerList.isNotEmpty
+                            ? db.filteredCustomerList[index]
+                            : db.customerList[index];
                         return ListTile(
                           tileColor: tileColors[index] ??
                               const Color.fromARGB(255, 128, 98, 248),
@@ -224,9 +225,9 @@ class _BookingListScreenState extends State<BookingListScreen> {
                           color: Colors.transparent,
                         );
                       }),
-                      itemCount: filteredCustomerList.isNotEmpty
-                          ? filteredCustomerList.length
-                          : customerList.length);
+                      itemCount: db.filteredCustomerList.isNotEmpty
+                          ? db.filteredCustomerList.length
+                          : db.customerList.length);
                 },
               ),
             ),
