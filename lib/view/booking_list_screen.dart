@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/contollers/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions_provider.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/view/subscreens/edit_customer.dart';
 import 'dart:async';
@@ -68,7 +68,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
     await Future.delayed(const Duration(seconds: 5));
     tileColors[index] = Colors.red;
     completionStatus[index] = true;
-    setState(() {});
+    // setState(() {});
   }
 
   @override

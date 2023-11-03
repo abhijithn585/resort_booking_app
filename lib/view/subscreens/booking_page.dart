@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/contollers/db_functions.dart';
+import 'package:flutter_application_1/contollers/date_provider.dart';
+import 'package:flutter_application_1/contollers/db_functions_provider.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
@@ -16,12 +17,12 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   final nameController = TextEditingController();
   final numberController = TextEditingController();
-  final fromDatecontroller = TextEditingController();
+  // final fromDatecontroller = TextEditingController();
   final rateController = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
-  DateTime fromDateTime = DateTime.now();
-  DateTime toDateTime = DateTime.now();
+  // DateTime fromDateTime = DateTime.now();
+  // DateTime toDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +152,10 @@ class _BookingScreenState extends State<BookingScreen> {
                                 IconButton(
                                   icon: const Icon(Icons.calendar_month),
                                   onPressed: () {
-                                    _showFromdatepicker(context);
+                                    // _showFromdatepicker(context);
+                                    Provider.of<DateProvider>(context,
+                                            listen: false)
+                                        .showDatePickers(context);
                                   },
                                 ),
                                 const SizedBox(
@@ -160,7 +164,10 @@ class _BookingScreenState extends State<BookingScreen> {
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    controller: fromDatecontroller,
+                                    controller: Provider.of<DateProvider>(
+                                            context,
+                                            listen: false)
+                                        .fromDatecontroller,
                                     decoration: InputDecoration(
                                       filled: true,
                                       fillColor: const Color.fromARGB(
@@ -258,31 +265,34 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  Future<DateTime?> _showFromdatepicker(BuildContext context) {
-    return showDatePicker(
-            context: context,
-            initialDate: fromDateTime,
-            firstDate: DateTime(2000),
-            lastDate: DateTime(2040))
-        .then((value) {
-      if (value != null) {
-        setState(() {
-          fromDateTime = value;
-          fromDatecontroller.text = _formatDate(value);
-        });
-      }
-    });
-  }
+  // Future<DateTime?> _showFromdatepicker(BuildContext context) {
+  //   return showDatePicker(
+  //           context: context,
+  //           initialDate: fromDateTime,
+  //           firstDate: DateTime(2000),
+  //           lastDate: DateTime(2040))
+  //       .then((value) {
+  //     if (value != null) {
+  //       setState(() {
+  //         fromDateTime = value;
+  //         fromDatecontroller.text = _formatDate(value);
+  //       });
+  //     }
+  //   });
+  // }
 
-  String _formatDate(DateTime date) {
-    return DateFormat('MM/dd/yyyy').format(date);
-  }
+  // String _formatDate(DateTime date) {
+  //   return DateFormat('MM/dd/yyyy').format(date);
+  // }
 
   Future<void> onAddDetailsButtonClicked(BuildContext context) async {
     final db = Provider.of<Dbprovider>(context, listen: false);
     final newName = nameController.text.trim();
     final newNumber = numberController.text.trim();
-    final newFromDate = fromDatecontroller.text.trim();
+    final newFromDate = Provider.of<DateProvider>(context, listen: false)
+        .fromDatecontroller
+        .text
+        .trim();
     final newRate = rateController.text.trim();
     if (newName.isEmpty || newNumber.isEmpty) {
       return;

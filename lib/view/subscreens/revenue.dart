@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/contollers/db_functions.dart';
+import 'package:flutter_application_1/contollers/db_functions_provider.dart';
 import 'package:flutter_application_1/model/data_model.dart';
 import 'package:provider/provider.dart';
 
