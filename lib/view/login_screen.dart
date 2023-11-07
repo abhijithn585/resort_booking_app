@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/view/widgets/bottomnavbar.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
   final userNameoCntroller = TextEditingController();
+
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             Navigator.of(context)
                                 .pushReplacement(MaterialPageRoute(
-                              builder: (context) => const BottomNavBar(),
+                              builder: (context) => BottomNavBar(),
                             ));
                           },
                           child: const Text('START')),

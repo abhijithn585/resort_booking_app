@@ -7,15 +7,13 @@ import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
-class EditCustomerScreen extends StatefulWidget {
+class EditCustomerScreen extends StatelessWidget {
   var name;
   var number;
   var fromdate;
   var rate;
   int index;
 
-  // ignore: use_key_in_widget_constructors
   EditCustomerScreen(
       {required this.index,
       required this.name,
@@ -23,36 +21,23 @@ class EditCustomerScreen extends StatefulWidget {
       required this.fromdate,
       required this.rate});
 
-  @override
-  State<EditCustomerScreen> createState() => _EditCustomerScreenState();
-}
-
-class _EditCustomerScreenState extends State<EditCustomerScreen> {
   TextEditingController nameController = TextEditingController();
+
   TextEditingController numberController = TextEditingController();
+
   // TextEditingController fromDatecontroller = TextEditingController();
   TextEditingController rateController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController(text: widget.name);
-    numberController = TextEditingController(text: widget.number);
-    // fromDatecontroller = TextEditingController(text: widget.fromdate);
-    // Provider.of<DateProvider>(context, listen: false).fromDatecontroller =
-    // widget.fromdate;
-    Future.delayed(Duration.zero, () {
-      Provider.of<DateProvider>(context, listen: false)
-          .DateSetter(widget.fromdate);
-    });
-    rateController = TextEditingController(text: widget.rate);
-  }
-
-  // DateTime fromDateTime = DateTime.now();
-  // DateTime toDateTime = DateTime.now();
-
+  // @override
   @override
   Widget build(BuildContext context) {
+    nameController = TextEditingController(text: name);
+    numberController = TextEditingController(text: number);
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<DateProvider>(context, listen: false).DateSetter(fromdate);
+    });
+    rateController = TextEditingController(text: rate);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 128, 98, 248),
@@ -252,7 +237,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20))),
                               onPressed: () {
-                                updateAll();
+                                updateAll(context);
                               },
                               child: const Text('Done')),
                         ),
@@ -269,26 +254,7 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
   }
 
   // Future<DateTime?> _showFromdatepicker(BuildContext context) {
-  //   return showDatePicker(
-  //           context: context,
-  //           initialDate: fromDateTime,
-  //           firstDate: DateTime(2000),
-  //           lastDate: DateTime(2040))
-  //       .then((value) {
-  //     if (value != null) {
-  //       setState(() {
-  //         fromDateTime = value;
-  //         fromDatecontroller.text = _formatDate(value);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // String _formatDate(DateTime date) {
-  //   return DateFormat('MM/dd/yyyy').format(date);
-  // }
-
-  Future<void> updateAll() async {
+  Future<void> updateAll(BuildContext context) async {
     final db = Provider.of<Dbprovider>(context, listen: false);
     final newName1 = nameController.text.trim();
     final newNumber1 = numberController.text.trim();
@@ -306,9 +272,9 @@ class _EditCustomerScreenState extends State<EditCustomerScreen> {
       fromdate: newFromDate1,
       rate: newRate1,
     );
-    db.editCustomer(widget.index, update);
+    db.editCustomer(index, update);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const BookingListScreen(),
+      builder: (context) => BookingListScreen(),
     ));
   }
 }

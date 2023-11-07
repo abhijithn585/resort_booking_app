@@ -81,7 +81,7 @@ class _BookingListScreenState extends State<BookingListScreen> {
           leading: IconButton(
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const BottomNavBar(),
+                  builder: (context) => BottomNavBar(),
                 ));
               },
               icon: const Icon(Icons.arrow_back_outlined)),

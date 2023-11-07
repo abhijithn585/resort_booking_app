@@ -5,23 +5,19 @@ import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:flutter_application_1/view/home_screen.dart';
 import 'package:provider/provider.dart';
 
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+class BottomNavBar extends StatelessWidget {
+  BottomNavBar({super.key});
 
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
   // int _selectedIndex = 0;
-  void navigateBottomBar(int index) {
+  void navigateBottomBar(BuildContext context, int index) {
     Provider.of<Pageprovider>(context, listen: false).navigateBottomBar(index);
   }
 
   final List<Widget> _pages = [
     HomeScreen(),
-    const BookingListScreen(),
+    BookingListScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +31,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           return DotNavigationBar(
               currentIndex: Provider.of<Pageprovider>(context, listen: false)
                   .selectedIndex,
-              onTap: navigateBottomBar,
+              onTap: (index) => navigateBottomBar(context, index),
               backgroundColor: const Color.fromARGB(255, 128, 98, 248),
               dotIndicatorColor: Colors.white,
               items: [

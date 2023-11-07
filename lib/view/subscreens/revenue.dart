@@ -7,15 +7,9 @@ import 'package:flutter_application_1/model/data_model.dart';
 import 'package:provider/provider.dart';
 
 // ignore: camel_case_types
-class revenueScreen extends StatefulWidget {
+class revenueScreen extends StatelessWidget {
   const revenueScreen({super.key});
 
-  @override
-  State<revenueScreen> createState() => _revenueScreenState();
-}
-
-// ignore: camel_case_types
-class _revenueScreenState extends State<revenueScreen> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<Dbprovider>(context, listen: false);

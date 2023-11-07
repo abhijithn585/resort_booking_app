@@ -7,23 +7,19 @@ import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class BookingScreen extends StatefulWidget {
-  const BookingScreen({super.key});
+class BookingScreen extends StatelessWidget {
+  BookingScreen({super.key});
 
-  @override
-  State<BookingScreen> createState() => _BookingScreenState();
-}
-
-class _BookingScreenState extends State<BookingScreen> {
   final nameController = TextEditingController();
+
   final numberController = TextEditingController();
+
   // final fromDatecontroller = TextEditingController();
   final rateController = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
-  // DateTime fromDateTime = DateTime.now();
-  // DateTime toDateTime = DateTime.now();
 
+  // DateTime fromDateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,25 +262,6 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   // Future<DateTime?> _showFromdatepicker(BuildContext context) {
-  //   return showDatePicker(
-  //           context: context,
-  //           initialDate: fromDateTime,
-  //           firstDate: DateTime(2000),
-  //           lastDate: DateTime(2040))
-  //       .then((value) {
-  //     if (value != null) {
-  //       setState(() {
-  //         fromDateTime = value;
-  //         fromDatecontroller.text = _formatDate(value);
-  //       });
-  //     }
-  //   });
-  // }
-
-  // String _formatDate(DateTime date) {
-  //   return DateFormat('MM/dd/yyyy').format(date);
-  // }
-
   Future<void> onAddDetailsButtonClicked(BuildContext context) async {
     final db = Provider.of<Dbprovider>(context, listen: false);
     final newName = nameController.text.trim();
@@ -319,7 +296,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
     db.addcustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const BookingListScreen(),
+      builder: (context) => BookingListScreen(),
     ));
   }
 }
