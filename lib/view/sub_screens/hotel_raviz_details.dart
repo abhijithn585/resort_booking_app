@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/view/subscreens/booking_page.dart';
+import 'package:flutter_application_1/view/sub_screens/booking_page.dart';
 import '../widgets/custom_widget.dart';
 
 class RavizDetails extends StatelessWidget {

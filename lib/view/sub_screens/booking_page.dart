@@ -7,37 +7,16 @@ import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class EditCustomerScreen extends StatelessWidget {
-  var name;
-  var number;
-  var fromdate;
-  var rate;
-  int index;
+class BookingScreen extends StatelessWidget {
+  BookingScreen({super.key});
 
-  EditCustomerScreen(
-      {required this.index,
-      required this.name,
-      required this.number,
-      required this.fromdate,
-      required this.rate});
+  final nameController = TextEditingController();
+  final numberController = TextEditingController();
+  final rateController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
 
-  TextEditingController nameController = TextEditingController();
-
-  TextEditingController numberController = TextEditingController();
-
-  // TextEditingController fromDatecontroller = TextEditingController();
-  TextEditingController rateController = TextEditingController();
-
-  // @override
   @override
   Widget build(BuildContext context) {
-    nameController = TextEditingController(text: name);
-    numberController = TextEditingController(text: number);
-
-    Future.delayed(Duration.zero, () {
-      Provider.of<DateProvider>(context, listen: false).DateSetter(fromdate);
-    });
-    rateController = TextEditingController(text: rate);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 128, 98, 248),
@@ -53,6 +32,7 @@ class EditCustomerScreen extends StatelessWidget {
             ),
           ),
           Form(
+            key: _formkey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -68,7 +48,7 @@ class EditCustomerScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Updation",
+                        "Registration",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
@@ -97,6 +77,13 @@ class EditCustomerScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Name',
                                     ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -133,6 +120,13 @@ class EditCustomerScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Number',
                                     ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -149,16 +143,9 @@ class EditCustomerScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.calendar_month),
                                   onPressed: () {
-                                    // _showFromdatepicker(context);
-
-                                    // Provider.of<DateProvider>(context,
-                                    //         listen: false)
-                                    //     .showDatePickers(context);
-                                    // Future.delayed(Duration.zero, () {
                                     Provider.of<DateProvider>(context,
                                             listen: false)
                                         .showDatePickers(context);
-                                    // });
                                   },
                                 ),
                                 const SizedBox(
@@ -167,7 +154,6 @@ class EditCustomerScreen extends StatelessWidget {
                                 SizedBox(
                                   width: 300,
                                   child: TextFormField(
-                                    // controller: fromDatecontroller,
                                     controller: Provider.of<DateProvider>(
                                             context,
                                             listen: false)
@@ -182,6 +168,13 @@ class EditCustomerScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'fromdate',
                                     ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
                                 )
                               ],
@@ -216,6 +209,13 @@ class EditCustomerScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Rate',
                                     ),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Value is Empty';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -237,7 +237,9 @@ class EditCustomerScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20))),
                               onPressed: () {
-                                updateAll(context);
+                                _formkey.currentState!.validate();
+
+                                onAddDetailsButtonClicked(context);
                               },
                               child: const Text('Done')),
                         ),
@@ -253,28 +255,41 @@ class EditCustomerScreen extends StatelessWidget {
     );
   }
 
-  // Future<DateTime?> _showFromdatepicker(BuildContext context) {
-  Future<void> updateAll(BuildContext context) async {
+  Future<void> onAddDetailsButtonClicked(BuildContext context) async {
     final db = Provider.of<Dbprovider>(context, listen: false);
-    final newName1 = nameController.text.trim();
-    final newNumber1 = numberController.text.trim();
-    final newFromDate1 = Provider.of<DateProvider>(context, listen: false)
+    final newName = nameController.text.trim();
+    final newNumber = numberController.text.trim();
+    final newFromDate = Provider.of<DateProvider>(context, listen: false)
         .fromDatecontroller
         .text
         .trim();
-    final newRate1 = rateController.text.trim();
-    if (newName1.isEmpty || newNumber1.isEmpty) {
+    final newRate = rateController.text.trim();
+    if (newName.isEmpty || newNumber.isEmpty) {
       return;
     }
-    final update = CustomerDataModel(
-      name: newName1,
-      number: newNumber1,
-      fromdate: newFromDate1,
-      rate: newRate1,
+    final isDuplicate = db.customerList.any(
+        (customer) => customer.name == newName || customer.number == newNumber);
+
+    if (isDuplicate) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content:
+              Text('Customer with the same name or number already exists.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    final newCustomer = CustomerDataModel(
+      name: newName,
+      number: newNumber,
+      fromdate: newFromDate,
+      rate: newRate,
     );
-    db.editCustomer(index, update);
+    db.addCustomer(newCustomer);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => BookingListScreen(),
+      builder: (context) => const BookingListScreen(),
     ));
   }
 }

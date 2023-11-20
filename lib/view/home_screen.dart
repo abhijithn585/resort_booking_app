@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_coastal_details.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_lakeside_details.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_paradise_details.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_prestige.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_raviz_details.dart';
-import 'package:flutter_application_1/view/subscreens/hotel_tropical_details.dart';
-import 'package:flutter_application_1/view/subscreens/terms_and_conditions.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_coastal_details.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_lakeside_details.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_paradise_details.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_prestige.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_raviz_details.dart';
+import 'package:flutter_application_1/view/sub_screens/hotel_tropical_details.dart';
+import 'package:flutter_application_1/view/sub_screens/terms_and_conditions.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({

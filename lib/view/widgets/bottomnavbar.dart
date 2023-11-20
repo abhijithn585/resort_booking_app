@@ -8,14 +8,13 @@ import 'package:provider/provider.dart';
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
 
-  // int _selectedIndex = 0;
   void navigateBottomBar(BuildContext context, int index) {
     Provider.of<Pageprovider>(context, listen: false).navigateBottomBar(index);
   }
 
   final List<Widget> _pages = [
     HomeScreen(),
-    BookingListScreen(),
+    const BookingListScreen(),
   ];
 
   @override

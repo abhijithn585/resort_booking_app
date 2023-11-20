@@ -6,7 +6,7 @@ class Dbprovider extends ChangeNotifier {
   List<CustomerDataModel> customerList = [];
   List<CustomerDataModel> filteredCustomerList = [];
 
-  Future<void> addcustomer(CustomerDataModel value) async {
+  Future<void> addCustomer(CustomerDataModel value) async {
     final customerDB = await Hive.openBox<CustomerDataModel>('customer_DB');
     customerDB.add(value);
     notifyListeners();

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           routes: {
             '/bottomNavBar': (context) => BottomNavBar(),
-            '/bookingListScreen': (context) => BookingListScreen(),
+            '/bookingListScreen': (context) => const BookingListScreen(),
           }),
     );
   }

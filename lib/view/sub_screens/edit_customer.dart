@@ -7,21 +7,33 @@ import 'package:flutter_application_1/view/booking_list_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class BookingScreen extends StatelessWidget {
-  BookingScreen({super.key});
+class EditCustomerScreen extends StatelessWidget {
+  var name;
+  var number;
+  var fromdate;
+  var rate;
+  int index;
 
-  final nameController = TextEditingController();
+  EditCustomerScreen(
+      {required this.index,
+      required this.name,
+      required this.number,
+      required this.fromdate,
+      required this.rate});
 
-  final numberController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
+  TextEditingController rateController = TextEditingController();
 
-  // final fromDatecontroller = TextEditingController();
-  final rateController = TextEditingController();
-
-  final _formkey = GlobalKey<FormState>();
-
-  // DateTime fromDateTime = DateTime.now();
   @override
   Widget build(BuildContext context) {
+    nameController = TextEditingController(text: name);
+    numberController = TextEditingController(text: number);
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<DateProvider>(context, listen: false).DateSetter(fromdate);
+    });
+    rateController = TextEditingController(text: rate);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 128, 98, 248),
@@ -37,7 +49,6 @@ class BookingScreen extends StatelessWidget {
             ),
           ),
           Form(
-            key: _formkey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -53,7 +64,7 @@ class BookingScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Registration",
+                        "Updation",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
@@ -82,13 +93,6 @@ class BookingScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Name',
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Value is Empty';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
                                   ),
                                 ),
                               ],
@@ -125,13 +129,6 @@ class BookingScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Number',
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Value is Empty';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
                                   ),
                                 ),
                               ],
@@ -148,7 +145,6 @@ class BookingScreen extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.calendar_month),
                                   onPressed: () {
-                                    // _showFromdatepicker(context);
                                     Provider.of<DateProvider>(context,
                                             listen: false)
                                         .showDatePickers(context);
@@ -174,13 +170,6 @@ class BookingScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'fromdate',
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Value is Empty';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
                                   ),
                                 )
                               ],
@@ -215,13 +204,6 @@ class BookingScreen extends StatelessWidget {
                                           borderSide: BorderSide.none),
                                       hintText: 'Rate',
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Value is Empty';
-                                      } else {
-                                        return null;
-                                      }
-                                    },
                                   ),
                                 ),
                               ],
@@ -243,9 +225,7 @@ class BookingScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20))),
                               onPressed: () {
-                                _formkey.currentState!.validate();
-
-                                onAddDetailsButtonClicked(context);
+                                updateAll(context);
                               },
                               child: const Text('Done')),
                         ),
@@ -261,42 +241,27 @@ class BookingScreen extends StatelessWidget {
     );
   }
 
-  // Future<DateTime?> _showFromdatepicker(BuildContext context) {
-  Future<void> onAddDetailsButtonClicked(BuildContext context) async {
+  Future<void> updateAll(BuildContext context) async {
     final db = Provider.of<Dbprovider>(context, listen: false);
-    final newName = nameController.text.trim();
-    final newNumber = numberController.text.trim();
-    final newFromDate = Provider.of<DateProvider>(context, listen: false)
+    final newName1 = nameController.text.trim();
+    final newNumber1 = numberController.text.trim();
+    final newFromDate1 = Provider.of<DateProvider>(context, listen: false)
         .fromDatecontroller
         .text
         .trim();
-    final newRate = rateController.text.trim();
-    if (newName.isEmpty || newNumber.isEmpty) {
+    final newRate1 = rateController.text.trim();
+    if (newName1.isEmpty || newNumber1.isEmpty) {
       return;
     }
-    final isDuplicate = db.customerList.any(
-        (customer) => customer.name == newName || customer.number == newNumber);
-
-    if (isDuplicate) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Customer with the same name or number already exists.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    final newCustomer = CustomerDataModel(
-      name: newName,
-      number: newNumber,
-      fromdate: newFromDate,
-      rate: newRate,
+    final update = CustomerDataModel(
+      name: newName1,
+      number: newNumber1,
+      fromdate: newFromDate1,
+      rate: newRate1,
     );
-    db.addcustomer(newCustomer);
+    db.editCustomer(index, update);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => BookingListScreen(),
+      builder: (context) => const BookingListScreen(),
     ));
   }
 }
